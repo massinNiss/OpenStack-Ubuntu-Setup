@@ -4,15 +4,18 @@
     DevStack is an open-source toolset used to quickly deploy an OpenStack environment for development and testing purposes. It simplifies the installation process by providing scripts that set up a minimal, functional OpenStack environment on a single machine or small-scale cluster.
 
 
-Create a non root user
-    $ sudo useradd -s /bin/bash -d /opt/stack -m stack
-       echo "stack ALL=(ALL) NOPASSWD:ALL" | sudo tee 
-       /etc/sudoers.d/stac
+Create a non root user :
+
+    $sudo useradd -s /bin/bash -d /opt/stack -m stack
+    $echo "stack ALL=(ALL) NOPASSWD:ALL" | sudo tee 
+       /etc/sudoers.d/stack
 
 Switch to the stack user:
+
     $ su - stack
 
 Clone the official DevStack repository:
+
     $git clone https://opendev.org/openstack/devstack
     $cd devstack
 
@@ -24,14 +27,17 @@ addresses, passwords, etc. It plays a crucial role in customizing the OpenStack
 installation via DevStack.
 
 Copy local.conf file from /samples directory to Desctack directory :
+
     ~/devstack$ sudo cp samples/local.conf .
 
 Retrieve the IP address of the second network interface, which was previously attached using Adapter #1.:
+
     ~/devstack$ ifconfig
 
 The IP address should begin with 192.168.56.x, as specified in the Adapter #1 configuration.
 
 Modify the file local.conf :
+
     ~/devstack$ sudo nano local.conf
 
 => Set passwords :
@@ -39,7 +45,7 @@ These passwords are required for administrative access, database, RabbitMQ, and
 OpenStack services. Replace “massin” with a secure and unique password in 
 production environments.(make sure to remember the password).
 
-    # Define the admin password
+# Define the admin password :
     ADMIN_PASSWORD= massin #(Set ur own password)
     DATABASE_PASSWORD=$ADMIN_PASSWORD
     RABBIT_PASSWORD=$ADMIN_PASSWORD
@@ -47,7 +53,7 @@ production environments.(make sure to remember the password).
 
 => Set Host ip:
 
-    # Specify the IP address for your machine
+# Specify the IP address for your machine
     HOST_IP= 192.168.56.X (make sure to put your IP)
 
 
@@ -93,11 +99,13 @@ To interact with OpenStack services using command-line tools, we'll first downlo
 
 4.Install admin-openrc.sh file.
 
-5.Move the file into stack home directory.
+5.Move the file into stack home directory:
+
     $ mv admin-openrc.sh /opt/stack/
     $ sudo su - stack #(make sure to to switch to the stack user)
 
 6.Source the file to set the environment variables using the following command:
+
         $ source admin-openrc.sh
 
 
