@@ -3,9 +3,11 @@ In OpenStack, users are created for authentication, while projects organize and 
 
 ## Create a project and a user 
 1. Create a Project (Tdia_project):
-    $ openstack project create --domain default --description "Project Description" Tdia_project
+   
+       $ openstack project create --domain default --description "Project Description" Tdia_project
 
 2.Create a User (Tdia_user):
+
     $ openstack user create --domain default --password <password> --project Tdia_project Tdia_user
 
 --> Make sure to replace <password> with the user's password.
@@ -21,9 +23,11 @@ When you're performing operations as Tdia_user in OpenStack, you need to source 
 
 For users, networking permissions are typically controlled by roles, so ensure the user (Tdia_user) has appropriate access to the networking resources. 
 ensure that the 'member' role  is assigned to Tdia_user using this command :
+
     $ openstack role assignment list --user Tdia_user --project Tdia_project
 
 Assign the 'member' role **if needed**:
+
     $ openstack role add --project Tdia_project --user Tdia_user member
 
 
@@ -32,10 +36,12 @@ log in to Tdia_user in The Dashboard using your credentials :(Tdia_user:<pasword
 
 Download Tdia_user-openrc.sh file (in Project/'API Access').
 move it to /opt/stack/ :
+
     $ sudo mv Tdia_user-openrc.sh /opt/stack/
     $ sudo su - stack
 
 Source file :
+
     $ source Tdia_user-openrc.sh
 
 Tdia_user-openrc.sh:
@@ -44,17 +50,21 @@ Tdia_user-openrc.sh:
 
 ### Step 1: Create a Router to Enable External Connectivity:
 If you want the network to have internet access or connect to external networks, you need a router.
+
     $ openstack router create Tdia_router
 
 verify the router's creation :
+
     $ openstack router list
 you should see your router's name and its corresponding ID, status and state.
 
 ### Step 2: Create a Network
 You need to create a network. This is a basic layer 2 network used to connect virtual machines (VMs) and other resources.
+
     $ openstack network create Tdia_network
 
 Verify the network's creation using this command :
+
     $ openstack network list
 
 ### Step 3: Create a Subnet for the Network
@@ -66,7 +76,9 @@ Once the network is created, you need to create a subnet for it. A subnet define
                 --gateway 10.10.1.1 \
                 --dns-nameserver 8.8.8.8 \
                 --project Tdia_project
-To verify the subnet's creation use :    
+                
+To verify the subnet's creation use : 
+
     $ openstack subnet list
 
 And u should see your subnet's details
@@ -82,6 +94,7 @@ To provide external connectivity (e.g., access to the internet), you need to con
     $ openstack router set --external-gateway <public> Tdia_router
 
 replace <public> with the name of the external network (if different in your environment). you can run this commadn to get the name of your external network :
+
     $ openstack network list --external
 
 !! If you find any errors, check the challenges section to fix them. !!
@@ -93,18 +106,21 @@ In OpenStack, a security group is a set of rules that control the incoming and o
 
 1.Add Rules to the Security Group:
   a. ALL ICMP (ping):  
+  
     $ openstack security group rule create --protocol icmp Tdia_sg
   
   b. ALLOW SSH (port 22) :
+  
     $ openstack security group rule create --protocol tcp --dst-port 22 Tdia_sg
   
   c.ALLOW HTTP & HTTPS (ports 80/443):
+  
     $ openstack security group rule create --protocol tcp --dst-port 80 Tdia_sg
-
     $ openstack security group rule create --protocol tcp --dst-port 443 Tdia_sg
 
 2.Verify the security group and rules:
 you can verify that the security group Tdia_sg was created and has the correct rules:
+
     $ openstack security group show Tdia_sg
 
 ## Create an Instance
@@ -112,6 +128,7 @@ you can verify that the security group Tdia_sg was created and has the correct r
 We are going to download the **[bionic-server-cloudimg-amd64.img](https://cloud-images.ubuntu.com/bionic/current/)** made by Openstack, which has a size of 387 MB and a description: QCow2 UEFI/GPT Bootable disk image.
 
 Move the image to /opt/stack :
+
     $ mv bionic-server-cloudimg-amd64.img /opt/stack
     $sudo su - stack
 
@@ -125,11 +142,13 @@ Move the image to /opt/stack :
             --protected
 Warning :
     You have to check first if openstack services can access those resources by running those commands:
+    
         1.1 $ source admin-openrc.sh
         1.2 $ openstack hypervisor stats show
-    Make sure that openstack services have suffisant resources like (more than 1024 gb of free_ram_mb and more than 5Gb disk --min-disk as mentionned in --min-ram and --mn-idisk) !!Check challenges for more info!!
+Make sure that openstack services have suffisant resources like (more than 1024 gb of free_ram_mb and more than 5Gb disk --min-disk as mentionned in --min-ram and --mn-idisk) !!Check challenges for more info!!
 
 Verify the image creation:
+
     $ openstack image list
 You should see the new image (Ubuntu-18.04) in the output.
 
@@ -139,30 +158,34 @@ Creating a flavor in OpenStack allows you to define the specifications (vCPUs, R
 
 1.Source the OpenStack admin RC file
 Because flavors are controlled only by The admin.
+
     $source admin-openrc.sh
 
 2.Create flavor :
-    $ openstack flavor create <flavor_name> \
-  --vcpus <number_of_vcpus> \
-  --ram <amount_of_ram_in_MB> \
-  --disk <disk_size_in_GB>
 
-    • <flavor_name>: Provide a unique name for the flavor (e.g., m1.tdia).
-    • <number_of_vcpus>: Enter the number of virtual CPUs for this flavor (e.g., 1).
-    • <amount_of_ram_in_MB>: Specify the amount of RAM in megabytes (e.g., 1024 for 1 GB).
-    • <disk_size_in_GB>: Enter the size of the root disk in gigabytes (e.g., 5).
+    $ openstack flavor create <flavor_name> --vcpus <number_of_vcpus> --ram <amount_of_ram_in_MB> --disk <disk_size_in_GB>
+
+• <flavor_name>: Provide a unique name for the flavor (e.g., m1.tdia).
+• <number_of_vcpus>: Enter the number of virtual CPUs for this flavor (e.g., 1).
+• <amount_of_ram_in_MB>: Specify the amount of RAM in megabytes (e.g., 1024 for 1 GB).
+• <disk_size_in_GB>: Enter the size of the root disk in gigabytes (e.g., 5).
 
 3.Verify the Flavor:
+
     $ openstack flavor list
 
 To view details about a specific flavor:
+
     $ openstack flavor show m1.tdia
 
 
 ### Step 4: Creating a key pairs
 Make sure that you are interacting with OpenStack services as Tdia_user within Tdia_project using the command:
+
     $ source Tdia_user-openrc.sh
+    
 then :
+
     $ openstack keypair create --private-key tdia_private_key.pem Tdia_Key
 
 Explain  :
@@ -174,25 +197,24 @@ This command will:
     Register the public key in OpenStack with the name Tdia_Key.
 
 Verify the Key Pair:
+
     $ openstack keypair list 
 
 You should see Tdia_Key in the output.
 
 ### Step 5: Create the instance
 Now we need to put everything we creating before in one composant that is our Instance :
-    $ openstack server create \
-        --image Ubuntu-18.04 \
-        --flavor m1.tdia \
-        --network Tdia_network \
-        --key-name Tdia_Key \
-        Tdia_Instance
+
+    $ openstack server create --image Ubuntu-18.04 --flavor m1.tdia --network Tdia_network --key-name Tdia_Key Tdia_Instance
 
 
 
 
 
 Verify the Instance: 
+
     $ openstack server list
+    
 If the instance is created successfully, it will show up in the list with the status=ACTIVE (if status=ERROR check challenges file to  fix issue).
 
 ## Access the Instance
@@ -213,6 +235,7 @@ This command will output a new floating IP address. **Note it down because it is
 
 ### Step 3: Assign the Floating IP to the Instance
 Associate the floating IP with the instance's port:
+
     $ openstack server add floating ip Tdia_Instance <floating_ip>
 
 ### Step 4: Verify the Floating IP
