@@ -33,15 +33,18 @@ Before you begin, ensure that you have:
    cd OpenStack-Ubuntu-Setup
 
 2. **Review the Documentation:**
+   
     The repository includes detailed instructions in the docs/ directory. Be sure to read through these files to understand the deployment process and any environment-specific requirements.
 
-3. **Follow the instructions provided in those files:**
+4. **Follow the instructions provided in those files:**
+   
      -configs\ubuntu.conf.md
      -configs\openstack.conf.md
 
-4. **Create an Instance:**
+6. **Create an Instance:**
+   
      -Automatically using the script: *scripts\Create_Instance.sh*
      -Manually using the instructions provided in the file: *instances\Readme.md*
 
-5. **Have Fun**
+8. **Have Fun**
    
