@@ -43,8 +43,8 @@ Before you begin, ensure that you have:
 
 6. **Create an Instance:**
    
-     -Automatically using the script: *scripts\Create_Instance.sh*
-     -Manually using the instructions provided in the file: *instances\Readme.md*
+     -Automatically using the script: *scripts\Create_Instance.sh*.
+     -Manually using the instructions provided in the file: *instances\Readme.md*.
 
 8. **Have Fun**
    
