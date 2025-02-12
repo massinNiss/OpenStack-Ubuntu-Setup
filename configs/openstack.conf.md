@@ -115,4 +115,4 @@ Run Command:
 
 this command provides information about the services that are available in the OpenStack environment and their corresponding API endpoints.
 
-# Now you're ready to move on to the next section about creating an instance.
+## Now you're ready to move on to the next section about creating an instance (/instances directory)
